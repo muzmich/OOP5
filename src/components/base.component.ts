@@ -5,9 +5,6 @@ export abstract class BaseComponent {
   protected app: p5;
   constructor() {
     this.app = OOP5.p5;
-    this.init();
   }
   abstract draw(): void;
-
-  public init(): void {}
 }

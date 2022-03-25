@@ -23,13 +23,14 @@ export abstract class OOP5 {
     this.init();
   }
 
-  private initP5(userSettings?: (p5: p5) => void) {
+  private initP5() {
     const settings = (p5: p5) => {
       OOP5.p5 = p5;
+      this.app = p5;
       p5.setup = () => this.setup();
       p5.draw = () => this.draw();
     };
-    new p5(userSettings || settings);
+    new p5(settings);
 
     this.components = [new Greeting()];
   }

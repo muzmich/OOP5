@@ -3,17 +3,9 @@
 Tired of working with single-file p5.js sketches?\
 This package has a solution for you, providing oop abstraction over p5.js functionality.
 
-Install oop5 package:
+Install package
 
     $ npm i oop5
-
-Install additional webpack packages:
-
-    $ npm i webpack webpack-cli webpack-dev-server html-webpack-plugin
-
-Install ts-loader:
-
-    $ npm i ts-loader
 
 ## Almost done!
 
@@ -23,29 +15,58 @@ Configure webpack or just use [my configuration file](https://github.com/muuuzmi
 
     $ npx webpack serve
 
+> If you use my config file, your application will be available at `localhost:9000`
+
 # How to use oop5
 
-## Example of index.ts file
+### Example of index.ts file
 
 ```typescript
 import { OOP5 } from "oop5";
 import { MyComponent } from "./components/MyComponent";
 
 class App extends OOP5 {
-  private height = 500;
-  private widht = 500;
+  private canvasSize!: {
+    height: number;
+    width: number;
+  };
 
-  /* function init called before setup function*/
+  /**
+   * Function called before setup function.
+   *
+   * Do not use any p5 related methods here as p5 has not
+   * been initialized yet.
+   * */
   protected init(): void {
-    this.components = [new MyComponent()];
+    this.canvasSize = {
+      height: 500,
+      width: 500,
+    };
+
+    this.components = [
+      new MyComponent(),
+      new MyComponent(),
+      new MyComponent(),
+      new MyComponent(),
+      new MyComponent(),
+    ];
   }
 
-  /* This are same as p5.js functions*/
+  /* This is same as p5.js setup function*/
   protected setup(): void {
-    this.app.createCanvas(this.width, this.height);
+    this.app.createCanvas(this.canvasSize.width, this.canvasSize.height);
+
+    this.initComponents();
   }
 
-  /* This are same as p5.js functions*/
+  /* This will run through components and init them */
+  private initComponents() {
+    this.components.forEach((component) => {
+      component.init();
+    });
+  }
+
+  /* This is same as p5.js draw function*/
   protected draw(): void {
     this.app.background(0);
     //loop through array of components and draw each of them.
@@ -54,13 +75,11 @@ class App extends OOP5 {
     });
   }
 }
-
+// Don't forget to call an instance of App somewhere
 new App();
 ```
 
-> _Any p5.js methods or enums are available via `this.app`_
-
-## Example of _MyComponent_ file
+### Example of _MyComponent_ file
 
 ```typescript
 import { BaseComponent } from "oop5";
@@ -69,7 +88,7 @@ export default class MyComponent extends BaseComponent {
   private diameter = 50;
   private x!: number;
   private y!: number;
-  // init() called once component was created
+  
   public init() {
     this.x = this.app.random(0, this.app.width);
     this.y = this.app.random(0, this.app.height);
@@ -81,3 +100,5 @@ export default class MyComponent extends BaseComponent {
   }
 }
 ```
+
+> _Any p5.js methods or enums are available via `this.app` in classes that extends OOP5 or BaseComponent_
