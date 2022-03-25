@@ -4,6 +4,10 @@ export declare abstract class OOP5 {
     /**
      * instance of p5
      */
+    static p5: p5;
+    /**
+     * instance of p5
+     */
     app: p5;
     /**
      * list of app components

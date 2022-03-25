@@ -6,7 +6,12 @@ export abstract class OOP5 {
   /**
    * instance of p5
    */
-  public app!: p5;
+  public static p5: p5;
+
+  /**
+   * instance of p5
+   */
+  public app: p5;
 
   /**
    * list of app components
@@ -20,13 +25,13 @@ export abstract class OOP5 {
 
   private initP5(userSettings?: (p5: p5) => void) {
     const settings = (p5: p5) => {
-      this.app = p5;
+      OOP5.p5 = p5;
       p5.setup = () => this.setup();
       p5.draw = () => this.draw();
     };
     new p5(userSettings || settings);
 
-    this.components = [new Greeting(this.app)];
+    this.components = [new Greeting()];
   }
 
   /**
