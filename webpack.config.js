@@ -6,8 +6,7 @@ module.exports = {
   mode: "development",
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/index.html",
-      title: "oop5",
+      // template: "src/index.html",
     }),
   ],
   module: {
