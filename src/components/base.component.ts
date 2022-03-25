@@ -7,4 +7,6 @@ export abstract class BaseComponent {
     this.app = OOP5.p5;
   }
   abstract draw(): void;
+
+  public init(): void {}
 }
