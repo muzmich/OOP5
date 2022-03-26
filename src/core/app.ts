@@ -1,8 +1,9 @@
 import p5 from "p5";
 import { BaseComponent } from "../components/base.component";
 import { Greeting } from "../components/greeting.component";
+import { KeyboardService } from "../services/keyboard.service";
 
-export abstract class OOP5 {
+export abstract class OOP5 extends KeyboardService {
   /**
    * instance of p5
    */
@@ -16,9 +17,10 @@ export abstract class OOP5 {
   /**
    * list of app components
    */
-  protected components!: BaseComponent[];
+  public components!: BaseComponent[];
 
   constructor() {
+    super();
     this.initP5();
     this.init();
   }
@@ -29,10 +31,11 @@ export abstract class OOP5 {
       this.app = p5;
       p5.setup = () => this.setup();
       p5.draw = () => this.draw();
+
+      this.components = [new Greeting()];
+      this.initKeyboardService(p5, this);
     };
     new p5(settings);
-
-    this.components = [new Greeting()];
   }
 
   /**
