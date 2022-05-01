@@ -5,7 +5,7 @@ This package has a solution for you, providing oop abstraction over p5.js functi
 
 Install package
 
-    $ npm i oop5
+    $ npm i oop5-js
 
 ## Almost done!
 
@@ -22,7 +22,7 @@ Configure webpack or just use [my configuration file](https://github.com/muuuzmi
 ### Example of index.ts file
 
 ```typescript
-import { OOP5 } from "oop5";
+import { OOP5 } from "oop5-js";
 import { MyComponent } from "./components/MyComponent";
 
 class App extends OOP5 {
@@ -82,7 +82,7 @@ new App();
 ### Example of _MyComponent_ file
 
 ```typescript
-import { BaseComponent } from "oop5";
+import { BaseComponent } from "oop5-js";
 
 export default class MyComponent extends BaseComponent {
   private diameter = 50;
