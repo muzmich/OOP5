@@ -1,4 +1,5 @@
+import p5 from 'p5';
 import { OOP5 } from "./core/app";
-import { BaseComponent } from "./components/base.component";
+import { P5Component } from "./components/base.component";
 
-export { OOP5, BaseComponent };
+export { OOP5, P5Component, p5 };

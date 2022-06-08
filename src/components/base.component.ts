@@ -1,11 +1,20 @@
 import p5 from "p5";
 import { OOP5 } from "../core/app";
-import { KeyboardService } from "../services/keyboard.service";
+import { InteractionHandler } from '../services/interactionHandler';
+import { KeyHandlerService } from '../services/keyHandler.service';
 
-export abstract class BaseComponent extends KeyboardService {
+
+export abstract class P5Component extends InteractionHandler {
   protected app: p5 = OOP5.p5;
 
-  abstract draw(): void;
+  constructor() {
+    super();
+    this.servicesBinding();
+  }
 
-  public init(): void {}
+  private servicesBinding() {
+    this.bindThisToKeyboardHandlers();
+  }
+
+  abstract draw(): void;
 }

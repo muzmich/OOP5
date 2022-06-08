@@ -1,9 +1,8 @@
 import p5 from "p5";
-import { BaseComponent } from "../components/base.component";
-import { Greeting } from "../components/greeting.component";
-import { KeyboardService } from "../services/keyboard.service";
+import { InteractionHandler } from '../services/interactionHandler';
+import { KeyHandlerService } from "../services/keyHandler.service";
 
-export abstract class OOP5 extends KeyboardService {
+export abstract class OOP5 extends InteractionHandler {
   /**
    * instance of p5
    */
@@ -17,39 +16,48 @@ export abstract class OOP5 extends KeyboardService {
   /**
    * list of app components
    */
-  public components!: BaseComponent[];
+  public components!: any[];
 
-  constructor() {
+  constructor(
+    private keyService = KeyHandlerService.getInstance(),
+  ) {
     super();
     this.initP5();
-    this.init();
+    this.initServices();
+    this.servicesBinding();
   }
 
   private initP5() {
-    const settings = (p5: p5) => {
-      OOP5.p5 = p5;
-      this.app = p5;
-      p5.setup = () => this.setup();
-      p5.draw = () => this.draw();
+    this.app = new p5((p5: p5) => {
+      p5.preload = this.preload.bind(this);
+      p5.setup = this.setup.bind(this);
+      p5.draw = this.draw.bind(this);
+    });
 
-      this.components = [new Greeting()];
-      this.initKeyboardService(p5, this);
-    };
-    new p5(settings);
+    OOP5.p5 = this.app;
   }
 
+  private initServices() {
+    this.keyService.init(this.app);
+  }
+
+  private servicesBinding() {
+    this.bindThisToKeyboardHandlers();
+  }
+
+
   /**
-   * This is init function. Called on app start.
+   * This is p5 preload function. Called before app start.
    */
-  protected abstract init(): void;
+  preload(): void { };
 
   /**
    * This is p5 setup function. Called after app start. Use it to create canvas, setup size etc.
    */
-  protected abstract setup(): void;
+  abstract setup(): void;
 
   /**
    * This is p5 draw function. Called for every frame
    */
-  protected abstract draw(): void;
+  abstract draw(): void;
 }
