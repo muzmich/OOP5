@@ -1,6 +1,7 @@
 import p5 from "p5";
 import { InteractionHandler } from '../services/interactionHandler';
 import { KeyHandlerService } from "../services/keyHandler.service";
+import { MouseHandlerService } from '../services/mouseHandler.service';
 
 export abstract class OOP5 extends InteractionHandler {
   /**
@@ -20,6 +21,7 @@ export abstract class OOP5 extends InteractionHandler {
 
   constructor(
     private keyService = KeyHandlerService.getInstance(),
+    private mouseService = MouseHandlerService.getInstance(),
   ) {
     super();
     this.initP5();
@@ -39,10 +41,11 @@ export abstract class OOP5 extends InteractionHandler {
 
   private initServices() {
     this.keyService.init(this.app);
+    this.mouseService.init(this.app);
   }
 
   private servicesBinding() {
-    this.bindThisToKeyboardHandlers();
+    this.bindThisToHandlers();
   }
 
 

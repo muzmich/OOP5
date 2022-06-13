@@ -20,7 +20,6 @@ export interface KeyboardListeners {
   keyReleased?(event?: KeyboardEvent): void;
   keyIsDown?(event?: KeyboardEvent): void;
   keyTyped?(event?: KeyboardEvent): void;
-  initKeyService?(service: KeyHandlerService): void;
 }
 
 export class KeyHandlerService {

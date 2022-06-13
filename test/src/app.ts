@@ -19,4 +19,9 @@ export class App extends OOP5 {
   keyPressed(event?: KeyboardEvent): void {
     console.log('press in app');
   }
+
+  mouseClicked(event: object): void {
+    console.log('click');
+
+  }
 }
