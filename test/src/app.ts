@@ -20,8 +20,8 @@ export class App extends OOP5 {
     console.log('press in app');
   }
 
+
   mouseClicked(event: object): void {
     console.log('click');
-
   }
 }
