@@ -66,7 +66,7 @@ export class Component extends P5Component {
 }
 ```
 
-> _Any p5.js methods or enums are available via `this.app` in classes that extends OOP5 or BaseComponent_
+> _Any p5.js methods or enums are available via `this.app` in classes that extends OOP5 or P5Component_
 
 # Event handling
 ### Currently package has native support of next events:
