@@ -9,7 +9,7 @@ Install package
 
 ## Almost done!
 
-Configure webpack or just use [my configuration file](https://github.com/muuuzmich/OOP5/blob/master/webpack.config.js). It will bundle your code and setup server with live reload.
+Configure webpack or just use [my configuration file](https://github.com/muuuzmich/OOP5/blob/master/example/webpack.config.js). It will bundle your code and setup server with live reload.
 
 ## To start application run
 
