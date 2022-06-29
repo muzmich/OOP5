@@ -15,13 +15,6 @@ export const keyEventMap: keyEvent[] = [
   keyEvent.keyReleased as const,
 ]
 
-export interface KeyboardListeners {
-  keyPressed?(event?: KeyboardEvent): void;
-  keyReleased?(event?: KeyboardEvent): void;
-  keyIsDown?(event?: KeyboardEvent): void;
-  keyTyped?(event?: KeyboardEvent): void;
-}
-
 export class KeyHandlerService {
   private static instance: KeyHandlerService;
 

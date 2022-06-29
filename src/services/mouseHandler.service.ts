@@ -20,17 +20,6 @@ export const mouseEventMap: mouseEvent[] = [
   mouseEvent.doubleClicked,
   mouseEvent.mouseWheel,
 ]
-
-export interface MouseListeners {
-  mouseMoved?(event?: object): void;
-  mouseDragged?(event?: object): void;
-  mousePressed?(event?: object): void;
-  mouseReleased?(event?: object): void;
-  mouseClicked?(event?: object): void;
-  doubleClicked?(event?: object): void;
-  mouseWheel?(event?: object): void;
-}
-
 export class MouseHandlerService {
   private static instance: MouseHandlerService;
 

@@ -1,22 +1,22 @@
-import { KeyboardListeners, keyEventMap, KeyHandlerService } from './keyHandler.service';
-import { mouseEventMap, MouseHandlerService, MouseListeners } from './mouseHandler.service';
+import { keyEventMap, KeyHandlerService } from './keyHandler.service';
+import { mouseEventMap, MouseHandlerService } from './mouseHandler.service';
 
-export abstract class InteractionHandler implements KeyboardListeners, MouseListeners {
+export abstract class InteractionHandler {
   // Keyboard events
-  keyPressed?(event?: KeyboardEvent): void;
-  keyReleased?(event?: KeyboardEvent): void;
-  keyIsDown?(event?: KeyboardEvent): void;
-  keyTyped?(event?: KeyboardEvent): void;
+  protected keyPressed?(event?: KeyboardEvent): void;
+  protected keyReleased?(event?: KeyboardEvent): void;
+  protected keyIsDown?(event?: KeyboardEvent): void;
+  protected keyTyped?(event?: KeyboardEvent): void;
 
   // Mouse events
 
-  mouseMoved?(event: object): void;
-  mouseDragged?(event: object): void;
-  mousePressed?(event: object): void;
-  mouseReleased?(event: object): void;
-  mouseClicked?(event: object): void;
-  doubleClicked?(event: object): void;
-  mouseWheel?(event: object): void;
+  protected mouseMoved?(event: object): void;
+  protected mouseDragged?(event: object): void;
+  protected mousePressed?(event: object): void;
+  protected mouseReleased?(event: object): void;
+  protected mouseClicked?(event: object): void;
+  protected doubleClicked?(event: object): void;
+  protected mouseWheel?(event: object): void;
 
   protected bindThisToHandlers() {
     this.bindThisToMouseHandlers();
@@ -26,7 +26,7 @@ export abstract class InteractionHandler implements KeyboardListeners, MouseList
   protected bindThisToKeyboardHandlers(): void {
     keyEventMap.forEach(event => {
       if (this[event] && typeof this[event] === 'function') {
-        KeyHandlerService.getInstance().addHandler(event, this[event])
+        KeyHandlerService.getInstance().addHandler(event, this[event].bind(this))
       }
     });
   }
@@ -34,7 +34,7 @@ export abstract class InteractionHandler implements KeyboardListeners, MouseList
   protected bindThisToMouseHandlers(): void {
     mouseEventMap.forEach(event => {
       if (this[event] && typeof this[event] === 'function') {
-        MouseHandlerService.getInstance().addHandler(event, this[event])
+        MouseHandlerService.getInstance().addHandler(event, this[event].bind(this))
       }
     });
   }
