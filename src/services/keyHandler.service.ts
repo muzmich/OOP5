@@ -33,11 +33,20 @@ export class KeyHandlerService {
     p5.keyReleased = this.keyReleasedHandler.bind(this);
   }
 
-  public addHandler(event: keyEvent, handler: Function) {
-    this.handlers[event].push(handler)
+  public addHandler(event: keyEvent, handler: Function, uuid?: string) {
+    this.handlers[event].push({
+      uuid,
+      handler,
+    })
   }
 
-  private handlers: Record<keyEvent, Function[]> = {
+  public removeHandler(event: keyEvent, id?: string) {
+    this.handlers[event] = [...this.handlers[event].filter(({ uuid }) => {
+      return id !== uuid
+    })]
+  }
+
+  private handlers: Record<keyEvent, { uuid: string | undefined, handler: Function }[]> = {
     keyPressed: [],
     keyIsDown: [],
     keyReleased: [],
@@ -45,25 +54,25 @@ export class KeyHandlerService {
   };
 
   private keyPressedHandler(event?: KeyboardEvent): void {
-    this.handlers.keyPressed.forEach(handler => {
+    this.handlers.keyPressed.forEach(({ handler }) => {
       handler(event);
     });
   }
 
   private keyIsDownHandler(event?: KeyboardEvent): void {
-    this.handlers.keyIsDown.forEach(handler => {
+    this.handlers.keyIsDown.forEach(({ handler }) => {
       handler(event);
     });
   }
 
   private keyReleasedHandler(event?: KeyboardEvent): void {
-    this.handlers.keyReleased.forEach(handler => {
+    this.handlers.keyReleased.forEach(({ handler }) => {
       handler(event);
     });
   }
 
   private keyTypedHandler(event?: KeyboardEvent): void {
-    this.handlers.keyReleased.forEach(handler => {
+    this.handlers.keyReleased.forEach(({ handler }) => {
       handler(event);
     });
   }

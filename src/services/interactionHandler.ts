@@ -23,11 +23,17 @@ export abstract class InteractionHandler {
     this.bindThisToKeyboardHandlers();
   }
 
-  protected bindThisToKeyboardHandlers(): void {
+  protected bindThisToKeyboardHandlers(uuid?: string): void {
     keyEventMap.forEach(event => {
       if (this[event] && typeof this[event] === 'function') {
-        KeyHandlerService.getInstance().addHandler(event, this[event].bind(this))
+        KeyHandlerService.getInstance().addHandler(event, this[event].bind(this), uuid)
       }
+    });
+  }
+
+  protected unbindThisFromKeyboardHandlers(uuid?: string): void {
+    keyEventMap.forEach(event => {
+      KeyHandlerService.getInstance().removeHandler(event, uuid)
     });
   }
 
@@ -36,6 +42,12 @@ export abstract class InteractionHandler {
       if (this[event] && typeof this[event] === 'function') {
         MouseHandlerService.getInstance().addHandler(event, this[event].bind(this))
       }
+    });
+  }
+
+  protected unbindThisFromMouseHandlers(uuid?: string): void {
+    mouseEventMap.forEach(event => {
+      MouseHandlerService.getInstance().removeHandler(event, uuid)
     });
   }
 }

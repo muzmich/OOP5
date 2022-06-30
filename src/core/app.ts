@@ -2,6 +2,7 @@ import p5 from "p5";
 import { InteractionHandler } from '../services/interactionHandler';
 import { KeyHandlerService } from "../services/keyHandler.service";
 import { MouseHandlerService } from '../services/mouseHandler.service';
+import { ComponentList } from './componentList';
 
 export abstract class OOP5 extends InteractionHandler {
   /**
@@ -17,7 +18,7 @@ export abstract class OOP5 extends InteractionHandler {
   /**
    * list of app components
    */
-  public components!: any[];
+  public readonly components = new ComponentList();
 
   constructor(
     private keyService = KeyHandlerService.getInstance(),

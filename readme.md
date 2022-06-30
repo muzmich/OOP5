@@ -1,15 +1,16 @@
-# oop5: develop p5 apps with OOP
+# oop5: develop p5 apps with OOP and typescript
 
 Tired of working with single-file p5.js sketches?\
-This package has a solution for you, providing oop abstraction over p5.js functionality.
+This package has a solution for you!\
+Providing oop abstraction over p5.js functionality and cool features.
 
-Install package
+## Install package
 
     $ npm i oop5-js
 
 ## Almost done!
 
-Configure webpack or just use [my configuration file](https://github.com/muuuzmich/OOP5/blob/master/example/webpack.config.js). It will bundle your code and setup server with live reload.
+Configure webpack or just use [my configuration file](https://github.com/muuuzmich/OOP5/blob/master/example/webpack.config.js). It will bundle your code, create html file and setup server with live reload.
 
 ## To start application run
 
@@ -17,7 +18,16 @@ Configure webpack or just use [my configuration file](https://github.com/muuuzmi
 
 > If you use my config file, your application will be available at `localhost:9000`
 
-# How to use oop5
+## Custom html
+By default Webpack will create its own html file. But if you want to customize it, you can add path to html template in `webpack.config.js`
+```
+plugins: [
+  new HtmlWebpackPlugin({
+    // template: "src/index.html",
+  }),
+],
+```
+# 🤷‍♂️ How to use oop5
 
 ### Example of _index.ts_ file
 
@@ -26,18 +36,26 @@ import { OOP5 } from "oop5-js";
 import { Component } from "./components/MyComponent";
 
 class App extends OOP5 {
-  setup(): void {
-    this.components = [
-      new Component
-    ];
+  setup() {
+    //setup canvas size and bg
     this.app.createCanvas(400, 400);
     this.app.background(0);
+
+    this.components.set([
+      new Component
+    ]);
   }
 
-  draw(): void {
-    this.components.forEach(component => {
+  draw() {
+    this.app.background(0);
+    
+    //call draw for each component in list
+    this.components.list.forEach(component => {
       component.draw();
     });
+
+    //or more compact way
+    this.components.draw();
   }
 }
 
@@ -45,7 +63,7 @@ class App extends OOP5 {
 new App();
 ```
 
-### Example of _MyComponent_ file
+### Example of _MyComponent.ts_ file
 
 ```typescript
 import { P5Component } from "oop5-js";
@@ -66,9 +84,27 @@ export class Component extends P5Component {
 }
 ```
 
-> _Any p5.js methods or enums are available via `this.app` in classes that extends OOP5 or P5Component_
+> _Any p5.js method or enum available via `this.app` in classes that extends OOP5 or P5Component_
 
-# Event handling
+# 🧱 Component handler
+App components should be stored inside `App` field `this.components`. It's not a regullar array but `ComponentList` class.
+> Make sure, to modify list of components only via this class methods as it handles proper destroying of gone components. Such as removing events listeners etc.
+
+## `ComponentList` fields and methods
+| Fields| Return type                                          | Description                   |
+| ----- | ---------------------------------------------------  | ----------------------------- |
+| list  | _Array_                                              | _native array of components_  |
+
+| Methods | Arguments                                                | Description                   |
+| -----   | ---------------------------------------------------      | ----------------------------- |
+| set     | (component: P5Component \\| P5Component[]) => number     | _set single or multiple components as current list_  |
+|         | ((list: P5Component[]) => P5Component[])) => number      | _callback will receive current component list and returning value will be set as current list_  |
+| add     | (component: P5Component \\| P5Component[]) => number     | _add single or multiple components to the list_  |
+
+# 📩 Event handling
+Event handlers are available in `App` and in `Component` classes as metods.\
+This way you can simply implement handler inside class and `oop5` will manage it.
+
 ### Currently package has native support of next events:
 ## Keyboard:
   - keyPressed
@@ -83,23 +119,31 @@ export class Component extends P5Component {
   - mouseClicked
   - doubleClicked
   - mouseWheel
-## Example usage: 
+# 🚜 Example usage: 
 ```typescript
 class App extends OOP5 {
+
+  //...setup code
+  
   keyPressed(event?: KeyboardEvent): void {
     console.log('catch in app', event);
   }
 }
 
 class Component extends P5Component {
+  
+  //...setup code
+  
   keyPressed(event?: KeyboardEvent): void {
     console.log('catch in component', event);
   }
 }
 ```
-> In the _example above_ `keyPressed` handler will be fired twice whenever you press key - as it catches event globally inside `App` and for each of the components
+## ⚠️ Currently all of the events are handled simultaneously with no option to stop propagation. This feature will be added later.
 
-# ⚠️ For any _not yet supported_ events supported by `p5` you can set them directly:
+> So in the _example above_ `keyPressed` handler will be fired once in `App` class and once (once for each instance of component) in `Component` class.
+
+## ⚠️ For any _not yet supported_ events supported by `p5` you can set them directly like this:
 ```typescript
 class App extends OOP5 {
   setup(): void {
@@ -111,3 +155,11 @@ class App extends OOP5 {
   }
 }
 ```
+
+# 🤖 This package is in active development. Feel free to submit bugs and features:
+
+on github https://github.com/muzmich/OOP5/issues
+
+on mail muzmich@icloud.com
+
+

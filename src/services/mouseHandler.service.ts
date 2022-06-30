@@ -41,11 +41,17 @@ export class MouseHandlerService {
     p5.mouseWheel = this.mouseWheelHandler.bind(this);
   }
 
-  public addHandler(event: mouseEvent, handler: Function) {
-    this.handlers[event].push(handler)
+  public addHandler(event: mouseEvent, handler: Function, uuid?: string) {
+    this.handlers[event].push({ uuid, handler })
   }
 
-  private handlers: Record<mouseEvent, Function[]> = {
+  public removeHandler(event: mouseEvent, id?: string) {
+    this.handlers[event] = [...this.handlers[event].filter(({ uuid }) => {
+      return id !== uuid
+    })]
+  }
+
+  private handlers: Record<mouseEvent, { uuid: string | undefined, handler: Function }[]> = {
     [mouseEvent.mouseMoved]: [],
     [mouseEvent.mouseDragged]: [],
     [mouseEvent.mousePressed]: [],
@@ -56,43 +62,43 @@ export class MouseHandlerService {
   };
 
   private mouseMovedHandler(event?: object): void {
-    this.handlers.mouseMoved.forEach(handler => {
+    this.handlers.mouseMoved.forEach(({ handler }) => {
       handler(event);
     })
 
   }
   private mouseDraggedHandler(event?: object): void {
-    this.handlers.mouseDragged.forEach(handler => {
+    this.handlers.mouseDragged.forEach(({ handler }) => {
       handler(event);
     })
 
   }
   private mousePressedHandler(event?: object): void {
-    this.handlers.mousePressed.forEach(handler => {
+    this.handlers.mousePressed.forEach(({ handler }) => {
       handler(event);
     })
 
   }
   private mouseReleasedHandler(event?: object): void {
-    this.handlers.mouseReleased.forEach(handler => {
+    this.handlers.mouseReleased.forEach(({ handler }) => {
       handler(event);
     })
 
   }
   private mouseClickedHandler(event?: object): void {
-    this.handlers.mouseClicked.forEach(handler => {
+    this.handlers.mouseClicked.forEach(({ handler }) => {
       handler(event);
     })
 
   }
   private doubleClickedHandler(event?: object): void {
-    this.handlers.doubleClicked.forEach(handler => {
+    this.handlers.doubleClicked.forEach(({ handler }) => {
       handler(event);
     })
 
   }
   private mouseWheelHandler(event?: object): void {
-    this.handlers.mouseWheel.forEach(handler => {
+    this.handlers.mouseWheel.forEach(({ handler }) => {
       handler(event);
     })
 
