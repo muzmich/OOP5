@@ -8,7 +8,8 @@ export class App extends OOP5 {
     this.app.background(0);
 
     this.components.set([
-      new Component
+      new Component,
+      new Component,
     ]);
   }
 
@@ -18,14 +19,8 @@ export class App extends OOP5 {
     this.components.draw();
   }
 
-  keyPressed(e: KeyboardEvent) {
-    //New
-    if (e.key === 'n') {
-      this.components.add(new Component);
-    }
-    //Delete all
-    if (e.key === 'd') {
-      this.components.set([])
-    }
+  protected keyPressed(event: KeyboardEvent, next: Function): void {
+    console.log('keyPressed in app');
+    next();
   }
 }

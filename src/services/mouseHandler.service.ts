@@ -1,5 +1,6 @@
 import p5 from "p5";
 import { OOP5 } from "../core/app";
+import { reduceHandlers } from '../utils/reduceHandlers';
 
 export enum mouseEvent {
   mouseMoved = 'mouseMoved',
@@ -43,64 +44,61 @@ export class MouseHandlerService {
 
   public addHandler(event: mouseEvent, handler: Function, uuid?: string) {
     this.handlers[event].push({ uuid, handler })
+
+    this.updateBindings(event);
   }
 
   public removeHandler(event: mouseEvent, id?: string) {
     this.handlers[event] = [...this.handlers[event].filter(({ uuid }) => {
       return id !== uuid
-    })]
+    })];
+
+    this.updateBindings(event);
   }
 
   private handlers: Record<mouseEvent, { uuid: string | undefined, handler: Function }[]> = {
-    [mouseEvent.mouseMoved]: [],
-    [mouseEvent.mouseDragged]: [],
-    [mouseEvent.mousePressed]: [],
-    [mouseEvent.mouseReleased]: [],
-    [mouseEvent.mouseClicked]: [],
-    [mouseEvent.doubleClicked]: [],
-    [mouseEvent.mouseWheel]: [],
+    mouseMoved: [],
+    mouseDragged: [],
+    mousePressed: [],
+    mouseReleased: [],
+    mouseClicked: [],
+    doubleClicked: [],
+    mouseWheel: [],
   };
 
-  private mouseMovedHandler(event?: object): void {
-    this.handlers.mouseMoved.forEach(({ handler }) => {
-      handler(event);
-    })
+  private bindedHandlers: Record<mouseEvent, Function | undefined> = {
+    mouseMoved: undefined,
+    mouseDragged: undefined,
+    mousePressed: undefined,
+    mouseReleased: undefined,
+    mouseClicked: undefined,
+    doubleClicked: undefined,
+    mouseWheel: undefined,
+  };
 
+  private updateBindings(event: mouseEvent) {
+    this.bindedHandlers[event] = reduceHandlers(this.handlers[event].map(e => e.handler));
   }
-  private mouseDraggedHandler(event?: object): void {
-    this.handlers.mouseDragged.forEach(({ handler }) => {
-      handler(event);
-    })
 
+  private mouseMovedHandler(event?: MouseEvent): void {
+    this.bindedHandlers.mouseMoved?.(event)
   }
-  private mousePressedHandler(event?: object): void {
-    this.handlers.mousePressed.forEach(({ handler }) => {
-      handler(event);
-    })
-
+  private mouseDraggedHandler(event?: MouseEvent): void {
+    this.bindedHandlers.mouseDragged?.(event)
   }
-  private mouseReleasedHandler(event?: object): void {
-    this.handlers.mouseReleased.forEach(({ handler }) => {
-      handler(event);
-    })
-
+  private mousePressedHandler(event?: MouseEvent): void {
+    this.bindedHandlers.mousePressed?.(event)
   }
-  private mouseClickedHandler(event?: object): void {
-    this.handlers.mouseClicked.forEach(({ handler }) => {
-      handler(event);
-    })
-
+  private mouseReleasedHandler(event?: MouseEvent): void {
+    this.bindedHandlers.mouseReleased?.(event)
   }
-  private doubleClickedHandler(event?: object): void {
-    this.handlers.doubleClicked.forEach(({ handler }) => {
-      handler(event);
-    })
-
+  private mouseClickedHandler(event?: MouseEvent): void {
+    this.bindedHandlers.mouseClicked?.(event)
   }
-  private mouseWheelHandler(event?: object): void {
-    this.handlers.mouseWheel.forEach(({ handler }) => {
-      handler(event);
-    })
-
+  private doubleClickedHandler(event?: MouseEvent): void {
+    this.bindedHandlers.doubleClicked?.(event)
+  }
+  private mouseWheelHandler(event?: MouseEvent): void {
+    this.bindedHandlers.mouseWheel?.(event)
   }
 }

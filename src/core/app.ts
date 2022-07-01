@@ -2,6 +2,7 @@ import p5 from "p5";
 import { InteractionHandler } from '../services/interactionHandler';
 import { KeyHandlerService } from "../services/keyHandler.service";
 import { MouseHandlerService } from '../services/mouseHandler.service';
+import { bindThisToMouseHandlers, bindThisToKeyboardHandlers } from '../utils/serviceBinding';
 import { ComponentList } from './componentList';
 
 export abstract class OOP5 extends InteractionHandler {
@@ -46,7 +47,8 @@ export abstract class OOP5 extends InteractionHandler {
   }
 
   private servicesBinding() {
-    this.bindThisToHandlers();
+    bindThisToMouseHandlers.bind(this)();
+    bindThisToKeyboardHandlers.bind(this)();
   }
 
 

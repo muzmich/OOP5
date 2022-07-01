@@ -1,5 +1,6 @@
 import p5 from "p5";
 import { OOP5 } from "../core/app";
+import { reduceHandlers } from '../utils/reduceHandlers';
 
 export enum keyEvent {
   keyPressed = 'keyPressed',
@@ -34,16 +35,17 @@ export class KeyHandlerService {
   }
 
   public addHandler(event: keyEvent, handler: Function, uuid?: string) {
-    this.handlers[event].push({
-      uuid,
-      handler,
-    })
+    this.handlers[event].push({ uuid, handler });
+
+    this.updateBindings(event);
   }
 
   public removeHandler(event: keyEvent, id?: string) {
     this.handlers[event] = [...this.handlers[event].filter(({ uuid }) => {
       return id !== uuid
-    })]
+    })];
+
+    this.updateBindings(event);
   }
 
   private handlers: Record<keyEvent, { uuid: string | undefined, handler: Function }[]> = {
@@ -53,27 +55,30 @@ export class KeyHandlerService {
     keyTyped: [],
   };
 
+  private bindedHandlers: Record<keyEvent, Function | undefined> = {
+    keyPressed: undefined,
+    keyIsDown: undefined,
+    keyReleased: undefined,
+    keyTyped: undefined,
+  };
+
+  private updateBindings(event: keyEvent) {
+    this.bindedHandlers[event] = reduceHandlers(this.handlers[event].map(e => e.handler));
+  }
+
   private keyPressedHandler(event?: KeyboardEvent): void {
-    this.handlers.keyPressed.forEach(({ handler }) => {
-      handler(event);
-    });
+    this.bindedHandlers.keyPressed?.(event);
   }
 
   private keyIsDownHandler(event?: KeyboardEvent): void {
-    this.handlers.keyIsDown.forEach(({ handler }) => {
-      handler(event);
-    });
+    this.bindedHandlers.keyIsDown?.(event);
   }
 
   private keyReleasedHandler(event?: KeyboardEvent): void {
-    this.handlers.keyReleased.forEach(({ handler }) => {
-      handler(event);
-    });
+    this.bindedHandlers.keyReleased?.(event);
   }
 
   private keyTypedHandler(event?: KeyboardEvent): void {
-    this.handlers.keyReleased.forEach(({ handler }) => {
-      handler(event);
-    });
+    this.bindedHandlers.keyTyped?.(event);
   }
 }

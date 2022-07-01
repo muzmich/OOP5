@@ -105,7 +105,7 @@ App components should be stored inside `App` field `this.components`. It's not a
 Event handlers are available in `App` and in `Component` classes as metods.\
 This way you can simply implement handler inside class and `oop5` will manage it.
 
-### Currently package has native support of next events:
+Currently package has native support of next events:
 ## Keyboard:
   - keyPressed
   - keyReleased
@@ -125,8 +125,15 @@ class App extends OOP5 {
 
   //...setup code
   
-  keyPressed(event?: KeyboardEvent): void {
+  keyPressed(event?: KeyboardEvent, next: Function): void {
     console.log('catch in app', event);
+
+    if(event.key === 'Escape'){
+      console.log('Escape catch, event will not propagate to any of components');
+      return;
+    }
+
+    next();
   }
 }
 
@@ -134,14 +141,16 @@ class Component extends P5Component {
   
   //...setup code
   
-  keyPressed(event?: KeyboardEvent): void {
+  keyPressed(event?: KeyboardEvent, next: Function): void {
     console.log('catch in component', event);
+    next();
   }
 }
 ```
-## ⚠️ Currently all of the events are handled simultaneously with no option to stop propagation. This feature will be added later.
 
-> So in the _example above_ `keyPressed` handler will be fired once in `App` class and once (once for each instance of component) in `Component` class.
+Make sure, to call `next()` function any time if you want to propagate event deeper. Or do not if you __don't want it to propagate__.
+
+>In example above, any `keyPress` event (except `Escape` key) will trigger handlers in Component also, as `next()` function is called.
 
 ## ⚠️ For any _not yet supported_ events supported by `p5` you can set them directly like this:
 ```typescript

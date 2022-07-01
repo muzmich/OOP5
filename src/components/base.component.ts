@@ -2,6 +2,7 @@ import p5 from "p5";
 import { OOP5 } from "../core/app";
 import { InteractionHandler } from '../services/interactionHandler';
 import { v4 as uuidv4 } from 'uuid';
+import { bindThisToMouseHandlers, bindThisToKeyboardHandlers } from '../utils/serviceBinding';
 
 export abstract class P5Component extends InteractionHandler {
   abstract draw(): void;
@@ -21,8 +22,8 @@ export abstract class P5Component extends InteractionHandler {
   }
 
   private servicesBinding() {
-    this.bindThisToKeyboardHandlers(this.uuid);
-    this.bindThisToMouseHandlers();
+    bindThisToMouseHandlers.bind(this)();
+    bindThisToKeyboardHandlers.bind(this)();
   }
 
   private unbindServices() {

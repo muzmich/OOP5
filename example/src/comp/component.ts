@@ -15,7 +15,8 @@ export class Component extends P5Component {
     this.app.circle(this.x, this.y, 100);
   }
 
-  keyPressed() {
-    console.log('key pressed in comp');
+  protected keyPressed(event: KeyboardEvent, next: Function): void {
+    console.log('keyPressed in component');
+    next();
   }
 }
