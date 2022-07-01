@@ -1,6 +1,6 @@
 {
   "name": "oop5-js",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Package to use p5.js library with typescript and OOP structure.",
   "main": "lib/index.js",
   "scripts": {
